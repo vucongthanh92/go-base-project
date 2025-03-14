@@ -2,14 +2,14 @@ serviceName: order_service
 development: true
 database:
   readDb:
-    connectionString: root:pwd_root@tcp(localhost:3306)/demo_db?charset=utf8mb4&parseTime=True&loc=Local
+    connectionString: root:rootroot@tcp(localhost:3307)/go_base_db?charset=utf8mb4&parseTime=True&loc=Local
     dbType: mysql
     migrationFilePath: migrations
     maxIdleConns: 100
     maxOpenConns: 200
     connMaxLifetime: 5
   writeDb:
-    connectionString: root:pwd_root@tcp(localhost:3306)/demo_db?charset=utf8mb4&parseTime=True&loc=Local
+    connectionString: root:rootroot@tcp(localhost:3307)/go_base_db?charset=utf8mb4&parseTime=True&loc=Local
     dbType: mysql
     migrationFilePath: migrations
     maxIdleConns: 100
@@ -56,13 +56,13 @@ kafka:
       numPartitions: 10
       replicationFactor: 1
 redis:
-  addrs: ["localhost:6379"]
+  addrs: ["localhost:6380"]
   password: ""
   db: 0
   poolSize: 300
 heathcheck:
   interval: 10
-  port: :6001
+  port: :7001
   goroutineThreshold: 1000
 metrics:
   prometheusPath: /metrics

@@ -6,9 +6,7 @@ import (
 	"github.com/swaggo/swag"
 	"github.com/vucongthanh92/go-base-project/config"
 	v1 "github.com/vucongthanh92/go-base-project/internal/api/http/v1"
-	"github.com/vucongthanh92/go-base-utils/http/middlewares"
 	httpserver "github.com/vucongthanh92/go-base-utils/http/server"
-	"github.com/vucongthanh92/go-base-utils/slack"
 )
 
 type Server struct {
@@ -42,13 +40,13 @@ func (s *Server) Run() {
 	}
 	httpServer, router := httpserver.NewServer(*config)
 
-	// Add recover panic middleware
-	router.Use(middlewares.RecoverPanicMiddleware(middlewares.RecoverPanicMiddlewareConfig{
-		SlackConfig: slack.SlackConfig{
-			Channel:         s.cfg.SlackService.Channel,
-			Username:        s.cfg.SlackService.Username,
-			UrlSlackWebHook: s.cfg.SlackService.UrlSlackWebhook,
-		}}))
+	// // Add recover panic middleware
+	// router.Use(middlewares.RecoverPanicMiddleware(middlewares.RecoverPanicMiddlewareConfig{
+	// 	SlackConfig: slack.SlackConfig{
+	// 		Channel:         s.cfg.SlackService.Channel,
+	// 		Username:        s.cfg.SlackService.Username,
+	// 		UrlSlackWebHook: s.cfg.SlackService.UrlSlackWebhook,
+	// 	}}))
 
 	// In the future, if we have v2, v3..., we will add at here
 	v1.MapRoutes(

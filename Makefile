@@ -19,14 +19,11 @@ compose:
 compose-dev:
 	docker compose -f docker-compose.dev.yaml up -d
 
-mock:
-	mockgen --build_flags=--mod=mod --destination=./internal/domain/interfaces/order/mocks/mock.go order_service/internal/domain/interfaces/order OrderCommandRepository,OrderQueryRepository,CacheRepository
-
 test:
 	go test -v ./...
 
 build-image:
-	docker build . -t order-service
+	docker build . -t go-base-project
 
 proto-gen:
 	protoc --go_out=pkg/grpc --go_opt=paths=source_relative \
