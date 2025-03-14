@@ -1,0 +1,101 @@
+serviceName: order_service
+development: true
+database:
+  readDb:
+    connectionString: root:pwd_root@tcp(localhost:3306)/demo_db?charset=utf8mb4&parseTime=True&loc=Local
+    dbType: mysql
+    migrationFilePath: migrations
+    maxIdleConns: 100
+    maxOpenConns: 200
+    connMaxLifetime: 5
+  writeDb:
+    connectionString: root:pwd_root@tcp(localhost:3306)/demo_db?charset=utf8mb4&parseTime=True&loc=Local
+    dbType: mysql
+    migrationFilePath: migrations
+    maxIdleConns: 100
+    maxOpenConns: 200
+    connMaxLifetime: 5
+http:
+  port: :5001
+  development: true
+  shutdownTimeout: 15
+  resources: ["internal/resources/en.json",	"internal/resources/fr.json",	"internal/resources/vi.json"]
+  allowOrigins: [ "http://locahost:8080" ]
+grpc:
+  port: :6001
+  development: true
+  maxConnectionIdle: 5
+  timeout: 15
+  maxConnectionAge: 5
+  time: 10
+client:
+  userService: "localhost:5002"
+  driverService: "localhost:5005"
+  commonService: "localhost:5008"
+logger:
+  level: debug
+  devMode: false
+  encoder: json
+tracing:
+  enable: false
+  serviceName: order_service
+  hostPort: "localhost:4317"
+  logSpans: false
+kafka:
+  dialer:
+    username: AGLMKA433JNXALY3
+    password: 8hG3ZfwlT77+8dNLSMMOB+Is0JXAGYCTH9fPm+FzzyYlZvuChC4rD50GrwXo/CXF
+  config:
+    brokers: [ "pkc-ldvr1.asia-southeast1.gcp.confluent.cloud:9092" ]
+    groupID: order_service_consumer
+    initTopics: false
+    numWorker: 20
+  topics:
+    submitOrder:
+      topicName: gogovan.consumer-web.order.submit-order
+      numPartitions: 10
+      replicationFactor: 1
+redis:
+  addrs: ["localhost:6379"]
+  password: ""
+  db: 0
+  poolSize: 300
+heathcheck:
+  interval: 10
+  port: :6001
+  goroutineThreshold: 1000
+metrics:
+  prometheusPath: /metrics
+  prometheusPort: :8001
+kakaomap:
+  appRestKey: 
+  mobilityApiEndpoint: 
+  coord2regioncode: 
+  address: 
+  priority:
+  timeChange:
+authenticate:
+  clientURI:
+s3:
+  path:
+  reconci:
+daservice:
+  webApi: https://business-staging.gogovan.co.kr
+  notification: /api/order/notification/new
+  webhook: /api/order/webhook/new
+  updateNotification: /api/order/notification
+  cancelOrderNotification: /api/order/cancelnoti
+  submitOrderNotification: /api/order/customer/notification
+  getListCoupons: /api/coupon/list
+  submitTipOrderAssigned: /api/order/notification/tip/assigned
+cronjob:
+  disable: true
+  dispatchSms: 60
+  stat: "0"
+  FILELOC5: ""
+featureflag:
+  payment: disable
+slackservice:
+  channel: 
+  username:
+  urlSlackWebhook: 
