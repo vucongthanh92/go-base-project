@@ -1,18 +1,18 @@
 package supplier
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/vucongthanh92/go-base-project/database"
+	"gorm.io/gorm"
 
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
 )
 
 type supplierCommandRepository struct {
-	readDb *sqlx.DB
+	writeDB *gorm.DB
 }
 
-func NewSupplierCommandRepository(readDb *database.ReadDb) interfaces.SupplierCommandRepoI {
-	return &supplierQueryRepository{
-		readDb: *readDb,
+func NewSupplierCommandRepository(writeDB *database.GormWriteDb) interfaces.SupplierCommandRepoI {
+	return &supplierCommandRepository{
+		writeDB: *writeDB,
 	}
 }

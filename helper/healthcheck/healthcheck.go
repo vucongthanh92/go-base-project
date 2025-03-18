@@ -7,7 +7,6 @@ import (
 	"net"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/vucongthanh92/go-base-project/config"
 	"github.com/vucongthanh92/go-base-project/database"
@@ -21,15 +20,15 @@ import (
 func RunHealthCheck(
 	ctx context.Context,
 	cfg *config.AppConfig,
-	readDb database.ReadDb,
-	writeDb database.WriteDb,
+	readDb database.GormReadDb,
+	writeDb database.GormWriteDb,
 ) func() {
 	return func() {
 		health := healthcheck.NewHandler()
 
-		interval := time.Duration(cfg.Heathcheck.Interval) * time.Second
+		// interval := time.Duration(cfg.Heathcheck.Interval) * time.Second
 		livenessCheck(cfg, health)
-		readinessCheck(ctx, health, interval, readDb, writeDb)
+		// readinessCheck(ctx, health, interval, readDb, writeDb)
 
 		logMd := func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -57,29 +56,30 @@ func livenessCheck(cfg *config.AppConfig, health healthcheck.Handler) {
 	health.AddLivenessCheck(constants.GoroutineThreshold, healthcheck.GoroutineCountCheck(cfg.Heathcheck.GoroutineThreshold))
 }
 
-func readinessCheck(
-	ctx context.Context,
-	health healthcheck.Handler,
-	interval time.Duration,
-	readDb database.ReadDb,
-	writeDb database.WriteDb,
-) {
-	health.AddReadinessCheck(constants.ReadDatabase, healthcheck.AsyncWithContext(ctx, func() error {
-		err := readDb.DB.PingContext(ctx)
-		if err != nil {
-			logger.Error("Read database", zap.Error(err))
-		}
-		return err
-	}, interval))
+// func readinessCheck(
+// 	ctx context.Context,
+// 	health healthcheck.Handler,
+// 	interval time.Duration,
+// 	readDb database.GormReadDb,
+// 	writeDb database.GormWriteDb,
+// ) {
+// 	health.AddReadinessCheck(constants.ReadDatabase, healthcheck.AsyncWithContext(ctx, func() error {
 
-	health.AddReadinessCheck(constants.WriteDatabase, healthcheck.AsyncWithContext(ctx, func() error {
-		err := writeDb.DB.PingContext(ctx)
-		if err != nil {
-			logger.Error("Write database", zap.Error(err))
-		}
-		return err
-	}, interval))
-}
+// 		err := readDb.DB.PingContext(ctx)
+// 		if err != nil {
+// 			logger.Error("Read database", zap.Error(err))
+// 		}
+// 		return err
+// 	}, interval))
+
+// 	health.AddReadinessCheck(constants.WriteDatabase, healthcheck.AsyncWithContext(ctx, func() error {
+// 		err := writeDb.DB.PingContext(ctx)
+// 		if err != nil {
+// 			logger.Error("Write database", zap.Error(err))
+// 		}
+// 		return err
+// 	}, interval))
+// }
 
 type ResponseWriter struct {
 	http.ResponseWriter

@@ -1,0 +1,48 @@
+definitions:
+  models.CreateCategoryReq:
+    properties:
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/category:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: CreateCategoryReq
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateCategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: create category
+      tags:
+      - Category
+  /api/v1/products:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: CreateCategoryReq
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateCategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: search products with filter and return pagination
+      tags:
+      - Supplier
+swagger: "2.0"

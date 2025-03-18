@@ -24,9 +24,9 @@ func NewSupplierHandler(
 // @Summary search products with filter and return pagination
 // @Accept json
 // @Produce json
-// @Param  params body entities.HomeMovingEstimateRequest true "ProductResponse List"
+// @Param  params body models.CreateCategoryReq true "CreateCategoryReq"
 // @Router 	/api/v1/products [get]
-// @Success	200 {object} httpcommon.SuccessResponse[entities.ResultOrder]
+// @Success	200
 func (h *ProductHandler) CreateSupplier(c *gin.Context) {
 	c.JSON(http.StatusOK, nil)
 }

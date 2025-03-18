@@ -4,7 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	httpcommon "github.com/vucongthanh92/go-base-project/helper/http_common"
+	"github.com/vucongthanh92/go-base-project/helper/validation"
 	"github.com/vucongthanh92/go-base-project/internal/application/product"
+	"github.com/vucongthanh92/go-base-project/internal/domain/models"
 )
 
 type ProductHandler struct {
@@ -24,10 +27,28 @@ func NewProductHandler(
 // @Summary search products with filter and return pagination
 // @Accept json
 // @Produce json
-// @Param  params body entities.HomeMovingEstimateRequest true "ProductResponse List"
+// @Param  params body models.CreateCategoryReq true "CreateCategoryReq"
 // @Router 	/api/v1/products [get]
-// @Success	200 {object} httpcommon.SuccessResponse[entities.ResultOrder]
+// @Success	200
 func (h *ProductHandler) GetProductList(c *gin.Context) {
+	var (
+		req    models.ProductListFilter
+		paging = httpcommon.ParseParams(c)
+	)
 
-	c.JSON(http.StatusOK, nil)
+	err := validation.GetQueryParamsHTTP(c, &req)
+	if err != nil {
+		return
+	}
+
+	req.Limit = paging.Limit
+	req.Offset = paging.Offset
+
+	res, totalRows, errorCommon := h.productService.GetProductsByFilter(c, req)
+	if errorCommon.Error != nil {
+		httpcommon.ExposeError(c, errorCommon)
+		return
+	}
+
+	c.JSON(http.StatusOK, httpcommon.NewPagingSuccessResponse(res, int(totalRows), nil, req.Limit))
 }

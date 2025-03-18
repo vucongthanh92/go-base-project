@@ -14,10 +14,20 @@ import (
 	"github.com/vucongthanh92/go-base-utils/tracing"
 )
 
-func CheckValidateHTTP(c *gin.Context, dest interface{}) (err error) {
+func GetBodyParamsHTTP(c *gin.Context, dest interface{}) (err error) {
 	_, span := tracing.StartSpanFromContext(c.Request.Context(), "check_validate_http")
 	defer span.End()
 	if err = c.ShouldBindJSON(&dest); err != nil {
+		checkErr(c, err)
+		return
+	}
+	return
+}
+
+func GetQueryParamsHTTP(c *gin.Context, dest interface{}) (err error) {
+	_, span := tracing.StartSpanFromContext(c.Request.Context(), "GetQueryParamsHTTP")
+	defer span.End()
+	if err = c.ShouldBindQuery(dest); err != nil {
 		checkErr(c, err)
 		return
 	}
@@ -66,14 +76,4 @@ func ValidationErrorToText(e validator.FieldError) string {
 		return constants.InvalidEmailFormat
 	}
 	return "InvalidRequest"
-}
-
-func GetQueryParamsHTTP(c *gin.Context, dest interface{}) (err error) {
-	_, span := tracing.StartSpanFromContext(c.Request.Context(), "GetQueryParamsHTTP")
-	defer span.End()
-	if err = c.ShouldBindQuery(dest); err != nil {
-		checkErr(c, err)
-		return
-	}
-	return
 }

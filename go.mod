@@ -21,6 +21,7 @@ require (
 	github.com/vucongthanh92/go-base-utils v1.2.6
 	go.uber.org/zap v1.27.0
 	gopkg.in/guregu/null.v3 v3.5.0
+	gorm.io/gorm v1.25.10
 )
 
 require (
@@ -178,5 +179,4 @@ require (
 	gorm.io/driver/postgres v1.5.11 // indirect
 	gorm.io/driver/sqlite v1.5.7 // indirect
 	gorm.io/driver/sqlserver v1.5.4 // indirect
-	gorm.io/gorm v1.25.10 // indirect
 )

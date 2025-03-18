@@ -1,18 +1,17 @@
 package category
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/vucongthanh92/go-base-project/database"
-	"github.com/vucongthanh92/go-base-project/redis"
+	"gorm.io/gorm"
 
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
 )
 
 type categoryQueryRepository struct {
-	readDb *sqlx.DB
+	readDb *gorm.DB
 }
 
-func NewCategoryQueryRepository(readDb *database.ReadDb, redisClient redis.Client) interfaces.CategoryQueryRepoI {
+func NewCategoryQueryRepository(readDb *database.GormReadDb) interfaces.CategoryQueryRepoI {
 	return &categoryQueryRepository{
 		readDb: *readDb,
 	}

@@ -1,18 +1,17 @@
 package supplier
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/vucongthanh92/go-base-project/database"
-	"github.com/vucongthanh92/go-base-project/redis"
+	"gorm.io/gorm"
 
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
 )
 
 type supplierQueryRepository struct {
-	readDb *sqlx.DB
+	readDb *gorm.DB
 }
 
-func NewSupplierQueryRepository(readDb *database.ReadDb, redisClient redis.Client) interfaces.SupplierQueryRepoI {
+func NewSupplierQueryRepository(readDb *database.GormReadDb) interfaces.SupplierQueryRepoI {
 	return &supplierQueryRepository{
 		readDb: *readDb,
 	}

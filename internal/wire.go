@@ -45,7 +45,7 @@ var handlerSet = wire.NewSet(
 var serviceSet = wire.NewSet(
 	cronjob.NewCronJobService,
 	productService.NewProductService,
-	categoryService.NewOtherService,
+	categoryService.NewCategoryService,
 	supplierService.NewSupplierService,
 )
 
@@ -60,8 +60,8 @@ var repoSet = wire.NewSet(
 
 func InitializeContainer(
 	appCfg *config.AppConfig,
-	readDb *database.ReadDb,
-	writeDb *database.WriteDb,
+	readDb *database.GormReadDb,
+	writeDb *database.GormWriteDb,
 	redisClient redis.Client,
 ) *api.ApiContainer {
 	wire.Build(repoSet, serviceSet, handlerSet, apiSet, container)

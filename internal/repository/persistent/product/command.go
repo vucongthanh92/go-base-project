@@ -1,17 +1,17 @@
 package product
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/vucongthanh92/go-base-project/database"
+	"gorm.io/gorm"
 
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
 )
 
 type productCommandRepository struct {
-	writeDb *sqlx.DB
+	writeDb *gorm.DB
 }
 
-func NewProductCommandRepository(writeDb *database.ReadDb) interfaces.ProductCommandRepoI {
+func NewProductCommandRepository(writeDb *database.GormWriteDb) interfaces.ProductCommandRepoI {
 	return &productCommandRepository{
 		writeDb: *writeDb,
 	}

@@ -7,9 +7,6 @@ swagger:
 install:
 	sh install.sh
 
-run:
-	go run main.go start --config=./config/local/config.yaml
-
 wire:
 	wire ./internal
 
@@ -30,3 +27,6 @@ proto-gen:
         --go-grpc_out=pkg/grpc --go-grpc_opt=paths=source_relative,require_unimplemented_servers=false \
         -I pkg/grpc/proto \
         pkg/grpc/proto/*.proto
+
+run-esc:
+	go run -gcflags="-m" main.go start --config=./config/local/config.yaml

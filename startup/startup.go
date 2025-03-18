@@ -27,8 +27,8 @@ import (
 func runServer(
 	ctx context.Context,
 	container *api.ApiContainer,
-	readDb database.ReadDb,
-	writeDb database.WriteDb,
+	readDb database.GormReadDb,
+	writeDb database.GormWriteDb,
 ) {
 	wp := workerpool.New(5)
 
@@ -47,11 +47,11 @@ func runServer(
 	wp.StopWait()
 }
 
-func registerDependencies(ctx context.Context) (*api.ApiContainer, database.ReadDb, database.WriteDb) {
+func registerDependencies(ctx context.Context) (*api.ApiContainer, database.GormReadDb, database.GormWriteDb) {
 	redisClient := redis.Open(cfg.Redis)
 
 	// Open database connection
-	readDb, writeDb := database.Open(cfg.Database)
+	readDb, writeDb := database.GetConnectByGorm(cfg.Database)
 
 	return internal.InitializeContainer(
 		cfg,
@@ -91,7 +91,6 @@ func start() {
 
 	// Init tracing
 	// Init validation
-
 	// validation.UseValidation(container.ValidationEngine.GetValidations()...)
 
 	// Run server

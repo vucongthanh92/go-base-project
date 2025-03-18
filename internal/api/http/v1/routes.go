@@ -14,12 +14,9 @@ func MapRoutes(
 ) {
 	v1 := router.Group("/api/v1")
 	{
-		// products apis
-		v1.GET("/products", nil)
+		v1.POST("/category", categoryHandler.CreateCategory)
 
-		// categories apis
-
-		// suppliers apis
+		v1.GET("/products", productHandler.GetProductList)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
