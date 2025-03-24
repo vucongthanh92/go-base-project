@@ -1,4 +1,4 @@
-package httpcommon
+package constants
 
 const (
 	SystemError                     = "SYSTEM_ERROR"

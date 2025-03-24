@@ -3,7 +3,7 @@ package product
 import (
 	"context"
 
-	httpcommon "github.com/vucongthanh92/go-base-project/helper/http_common"
+	errHandler "github.com/vucongthanh92/go-base-project/helper/error_handler"
 	"github.com/vucongthanh92/go-base-project/internal/domain/entities"
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
 	"github.com/vucongthanh92/go-base-project/internal/domain/models"
@@ -25,15 +25,15 @@ func (s *ProductImpl) CreateProduct(ctx context.Context) error {
 }
 
 func (s *ProductImpl) GetProductsByFilter(ctx context.Context, req models.ProductListFilter) (
-	response []entities.Product, totalRows int64, errRes httpcommon.ErrorDTO) {
+	response []entities.Product, totalRows int64, resErr *errHandler.ErrorBuilder) {
 
 	ctx, span := tracing.StartSpanFromContext(ctx, "GetProductsByFilter")
 	defer func() {
 		span.End()
 	}()
 
-	response, totalRows, errRes = s.productReadRepo.GetProductByFilter(ctx, req)
-	return response, totalRows, errRes
+	response, totalRows, resErr = s.productReadRepo.GetProductByFilter(ctx, req)
+	return response, totalRows, resErr
 }
 
 func (s *ProductImpl) GetProductByID(ctx context.Context) error {

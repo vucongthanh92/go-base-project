@@ -44,9 +44,9 @@ func (h *ProductHandler) GetProductList(c *gin.Context) {
 	req.Limit = paging.Limit
 	req.Offset = paging.Offset
 
-	res, totalRows, errorCommon := h.productService.GetProductsByFilter(c, req)
-	if errorCommon.Error != nil {
-		httpcommon.ExposeError(c, errorCommon)
+	res, totalRows, resErr := h.productService.GetProductsByFilter(c, req)
+	if resErr != nil {
+		resErr.ExposeHttpError(c)
 		return
 	}
 

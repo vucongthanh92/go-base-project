@@ -12,6 +12,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/heptiolabs/healthcheck v0.0.0-20211123025425-613501dd5deb
 	github.com/jasonlvhit/gocron v0.0.1
+	github.com/jinzhu/copier v0.4.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/redis/go-redis/v9 v9.7.1
 	github.com/spf13/viper v1.19.0

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/vucongthanh92/go-base-project/helper/constants"
 	"github.com/vucongthanh92/go-base-utils/logger"
 	"go.uber.org/zap"
 )
@@ -46,11 +47,13 @@ func ParseQueryParams(params map[string][]string) map[string]any {
 }
 
 func GetUserId(c *gin.Context) (int64, error) {
+
 	//get jwt token
 	token := GetAuthToken(c)
 	if token == "" {
-		return 0, errors.New(ToKenIsMissing)
+		return 0, errors.New(constants.ToKenIsMissing)
 	}
+
 	// parse jwt without verify
 	data, err := parseJwt(token)
 	if err != nil {
@@ -73,7 +76,7 @@ func GetAdminID(c *gin.Context) (int64, error) {
 	//get jwt token
 	token := GetAuthToken(c)
 	if token == "" {
-		return 0, errors.New(ToKenIsMissing)
+		return 0, errors.New(constants.ToKenIsMissing)
 	}
 	// parse jwt without verify
 	data, err := parseJwt(token)
@@ -88,7 +91,7 @@ func GetAdminID(c *gin.Context) (int64, error) {
 
 	resp := int64(adminID)
 	if reflect.ValueOf(resp).IsZero() {
-		return 0, errors.New(ToKenIsMissing)
+		return 0, errors.New(constants.ToKenIsMissing)
 	}
 
 	// get user id

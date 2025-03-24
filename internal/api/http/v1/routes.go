@@ -14,8 +14,13 @@ func MapRoutes(
 ) {
 	v1 := router.Group("/api/v1")
 	{
+		// api for category
 		v1.POST("/category", categoryHandler.CreateCategory)
+		v1.PUT("/category/:id", categoryHandler.UpdateCategory)
+		v1.DELETE("/category/:id", categoryHandler.DeleteCategoryByID)
+		v1.GET("/categories", categoryHandler.GetCategoryList)
 
+		// api for product
 		v1.GET("/products", productHandler.GetProductList)
 	}
 

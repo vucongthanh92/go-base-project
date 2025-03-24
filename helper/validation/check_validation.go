@@ -8,6 +8,7 @@ import (
 	"github.com/vucongthanh92/go-base-project/helper/constants"
 	httpcommon "github.com/vucongthanh92/go-base-project/helper/http_common"
 	"github.com/vucongthanh92/go-base-project/helper/utils"
+	"github.com/vucongthanh92/go-base-project/internal/domain/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -37,29 +38,29 @@ func GetQueryParamsHTTP(c *gin.Context, dest interface{}) (err error) {
 func checkErr(c *gin.Context, err error) {
 	switch t := err.(type) {
 	case *json.UnmarshalTypeError:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(t.Field, httpcommon.RequestInvalid, t.Field))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(t.Field, constants.RequestInvalid, t.Field))
 		return
 	case *json.SyntaxError:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), httpcommon.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.RequestInvalid, ""))
 		return
 	case validator.ValidationErrors:
 		errors := HandleValidationErrors(err)
 		c.JSON(http.StatusBadRequest, httpcommon.NewPartialSuccess[any](false, nil, errors))
 		return
 	default:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), httpcommon.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.RequestInvalid, ""))
 		return
 	}
 }
 
-func HandleValidationErrors(err error) (errors []httpcommon.ErrorResponse) {
+func HandleValidationErrors(err error) (errors []models.ErrorDTO) {
 	for _, fieldErr := range err.(validator.ValidationErrors) {
 		message := ValidationErrorToText(fieldErr)
 		fields := utils.LowerInitial(strings.Split(fieldErr.StructNamespace(), ".")[1:])
 		field := strings.Join(fields, ".")
 		errorCode, ok := TagMap[fieldErr.Tag()]
 		if !ok {
-			errorCode = httpcommon.InvalidFormat
+			errorCode = constants.InvalidFormat
 		}
 		errors = httpcommon.AddError(errors, message, string(errorCode), field)
 	}

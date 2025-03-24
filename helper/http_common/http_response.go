@@ -5,25 +5,21 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/vucongthanh92/go-base-project/helper/constants"
+	"github.com/vucongthanh92/go-base-project/internal/domain/models"
 )
 
 type SuccessResponse[T any] struct {
-	Success bool            `json:"success"`
-	Data    *T              `json:"data"`
-	Errors  []ErrorResponse `json:"errors"`
+	Success bool              `json:"success"`
+	Data    *T                `json:"data"`
+	Errors  []models.ErrorDTO `json:"errors"`
 }
 
 type PagingSuccessResponse[T any] struct {
-	Success bool            `json:"success"`
-	Data    []T             `json:"data"`
-	Errors  []ErrorResponse `json:"errors"`
-	Meta    Meta            `json:"meta"`
-}
-
-type ErrorResponse struct {
-	Message string `json:"message"`
-	Field   string `json:"field"`
-	Code    string `json:"code"`
+	Success bool              `json:"success"`
+	Data    []T               `json:"data"`
+	Errors  []models.ErrorDTO `json:"errors"`
+	Meta    Meta              `json:"meta"`
 }
 
 func NewSuccessResponse[T any](data T) SuccessResponse[T] {
@@ -34,7 +30,7 @@ func NewSuccessResponse[T any](data T) SuccessResponse[T] {
 	}
 }
 
-func NewPartialSuccess[T any](success bool, data T, errors []ErrorResponse) SuccessResponse[T] {
+func NewPartialSuccess[T any](success bool, data T, errors []models.ErrorDTO) SuccessResponse[T] {
 	return SuccessResponse[T]{
 		Data:    &data,
 		Success: success,
@@ -81,8 +77,8 @@ func NewPagingSuccessResponse[T any](data []T, total int, additionalData any, li
 }
 
 func NewErrorResponse(message string, code string, field string) SuccessResponse[any] {
-	var errors []ErrorResponse
-	error := ErrorResponse{
+	var errors []models.ErrorDTO
+	error := models.ErrorDTO{
 		Message: message,
 		Field:   field,
 		Code:    code,
@@ -95,9 +91,9 @@ func NewErrorResponse(message string, code string, field string) SuccessResponse
 	}
 }
 
-func NewError(message string, code string, field string) []ErrorResponse {
-	var errors []ErrorResponse
-	error := ErrorResponse{
+func NewError(message string, code string, field string) []models.ErrorDTO {
+	var errors []models.ErrorDTO
+	error := models.ErrorDTO{
 		Message: message,
 		Field:   field,
 		Code:    code,
@@ -106,9 +102,9 @@ func NewError(message string, code string, field string) []ErrorResponse {
 	return errors
 }
 
-func AddError(errOrigin []ErrorResponse, message string, code string, field string) []ErrorResponse {
-	var errors []ErrorResponse
-	err := ErrorResponse{
+func AddError(errOrigin []models.ErrorDTO, message string, code string, field string) []models.ErrorDTO {
+	var errors []models.ErrorDTO
+	err := models.ErrorDTO{
 		Message: message,
 		Field:   field,
 		Code:    code,
@@ -118,16 +114,22 @@ func AddError(errOrigin []ErrorResponse, message string, code string, field stri
 }
 
 type ErrorDTO struct {
-	IsSystemError bool   `json:"isSystemError"`
-	Field         string `json:"field"`
+	IsSystemError bool   `json:"is_system_error"`
 	Error         error  `json:"error"`
+	Code          string `json:"code"`
+	Status        int    `json:"status"`
+	Field         string `json:"field"`
+	MessageError  string `json:"message_error"`
 }
 
-func NewErrorDTO(isSystemError bool, field string, err error) ErrorDTO {
+func NewErrorDTO(isSystemError bool, err error, field string, message string, code string, status int) ErrorDTO {
 	return ErrorDTO{
 		IsSystemError: isSystemError,
+		MessageError:  message,
+		Code:          code,
 		Field:         field,
 		Error:         err,
+		Status:        status,
 	}
 }
 
@@ -146,12 +148,27 @@ func ExposeError(c *gin.Context, errorCommon ErrorDTO) {
 	case !errorCommon.IsSystemError:
 		{
 			httpStatus = http.StatusBadRequest
-			errCode = RequestInvalid
+			errCode = constants.RequestInvalid
+
 		}
 	default:
 		httpStatus = http.StatusInternalServerError
-		errCode = SystemError
+		errCode = constants.SystemError
 	}
 
 	c.JSON(httpStatus, NewErrorResponse(errMsg, errCode, errorCommon.Field))
+}
+
+type listDataResponse struct {
+	Data        interface{} `json:"data"`
+	HasMoreData bool        `json:"hasMoreData"`
+	Total       int64       `json:"total"`
+}
+
+func NewListResponse(data interface{}, hasMoreData bool, total int64) listDataResponse {
+	return listDataResponse{
+		Data:        data,
+		HasMoreData: hasMoreData,
+		Total:       total,
+	}
 }
