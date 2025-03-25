@@ -148,12 +148,12 @@ func ExposeError(c *gin.Context, errorCommon ErrorDTO) {
 	case !errorCommon.IsSystemError:
 		{
 			httpStatus = http.StatusBadRequest
-			errCode = constants.RequestInvalid
+			errCode = constants.REQUEST_INVALID
 
 		}
 	default:
 		httpStatus = http.StatusInternalServerError
-		errCode = constants.SystemError
+		errCode = constants.REQUEST_INVALID
 	}
 
 	c.JSON(httpStatus, NewErrorResponse(errMsg, errCode, errorCommon.Field))

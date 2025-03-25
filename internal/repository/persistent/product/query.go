@@ -35,7 +35,7 @@ func (repo *productQueryRepository) GetProductByFilter(ctx context.Context, filt
 	if err != nil {
 		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
 			Message: err.Error(),
-			Code:    constants.SystemError,
+			Code:    constants.SYSTEM_ERROR,
 		})
 		return response, totalRows, resErr
 	}
@@ -55,7 +55,7 @@ func (repo *productQueryRepository) CountProductByCategoryID(ctx context.Context
 	if err != nil {
 		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
 			Message: err.Error(),
-			Code:    constants.SystemError,
+			Code:    constants.SYSTEM_ERROR,
 		})
 		return total, resErr
 	}

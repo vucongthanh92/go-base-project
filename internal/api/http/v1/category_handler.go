@@ -68,7 +68,7 @@ func (h *CategoryHandler) UpdateCategory(c *gin.Context) {
 	objectID := c.Param("id")
 	req.ID, err = strconv.ParseUint(objectID, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse("Invalid ID", constants.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse("Invalid ID", constants.REQUEST_INVALID, ""))
 		return
 	}
 
@@ -101,7 +101,7 @@ func (h *CategoryHandler) DeleteCategoryByID(c *gin.Context) {
 	objectID := c.Param("id")
 	categoryID, err := strconv.ParseUint(objectID, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse("Invalid ID", constants.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse("Invalid ID", constants.REQUEST_INVALID, ""))
 		return
 	}
 

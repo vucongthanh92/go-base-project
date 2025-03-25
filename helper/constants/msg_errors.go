@@ -1,11 +1,12 @@
 package constants
 
+// Error code
 const (
-	SystemError                     = "SYSTEM_ERROR"
-	RequestInvalid                  = "REQUEST_INVALID"
-	PickupTimeInvalid               = "PICKUP_TIME_INVALID"
-	IsExist                         = "EXISTED"
-	IsNotExist                      = "NOT_EXIST"
+	SYSTEM_ERROR                    = "system_error"      //
+	REQUEST_INVALID                 = "request_invalid"   //
+	RECORD_NOT_EXIST                = "record_not_exist"  //
+	RECORD_EXISTED                  = "record_existed"    //
+	PERMISSION_DENIED               = "permission_denied" //
 	UserIsNotExist                  = "USER_NOT_EXIST"
 	InvalidFormat                   = "INVALID_FORMAT"
 	ErrorMapData                    = "ERROR_MAP_DATA"
@@ -31,9 +32,10 @@ const (
 	PerMissionDenied                = "PERMISSION_DENIED"
 )
 
+// Error message
 const (
-	OtpMessage                = "OTP is not correct"
-	MappingObjectError        = "Mapping Object Error"
-	OrderIdNotCorrect         = "OrderId Not Correct"
-	UpdatedAtIsChangedMessage = "Data has been changed"
+	SystemErrorMessage    = "There was an error on the server side"
+	RequestInvalidMessage = "Invalid request"
+	RecordNotExistMessage = "data does not exist"
+	RecordExistMessage    = "data already exists"
 )

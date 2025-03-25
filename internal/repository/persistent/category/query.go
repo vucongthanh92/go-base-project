@@ -2,6 +2,7 @@ package category
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/vucongthanh92/go-base-project/database"
 	"github.com/vucongthanh92/go-base-project/helper/constants"
@@ -33,10 +34,14 @@ func (repo *categoryQueryRepository) GetCategoryByID(ctx context.Context, id uin
 		Where("id = ?", id).Where("deleted_at is null").
 		Take(&res).Error
 	if err != nil {
-		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
-			Message: err.Error(),
-			Code:    constants.SystemError,
-		})
+		resErr := errHandler.InitErrorBuilder().
+			SetIsSystemError(false).
+			SetLogError(err).
+			SetStatus(http.StatusNotFound).
+			SetError(models.ErrorDTO{
+				Message: "Category not found",
+				Code:    constants.RECORD_NOT_EXIST,
+			})
 		return res, resErr
 	}
 
@@ -53,7 +58,7 @@ func (repo *categoryQueryRepository) GetCategoryList(ctx context.Context) (res [
 	if err != nil {
 		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
 			Message: err.Error(),
-			Code:    constants.SystemError,
+			Code:    constants.SYSTEM_ERROR,
 		})
 		return res, resErr
 	}

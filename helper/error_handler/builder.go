@@ -1,9 +1,6 @@
 package errorhandler
 
 import (
-	"github.com/gin-gonic/gin"
-	httpcommon "github.com/vucongthanh92/go-base-project/helper/http_common"
-	"github.com/vucongthanh92/go-base-project/helper/utils"
 	"github.com/vucongthanh92/go-base-project/internal/domain/models"
 )
 
@@ -13,13 +10,16 @@ type ErrorBuilder struct {
 	LogError        error             `json:"log_error"`
 	Status          int               `json:"status"`
 	Errors          []models.ErrorDTO `json:"errors"`
+	Validator       ErrorValidator
 }
 
 func InitErrorBuilder() *ErrorBuilder {
-	return &ErrorBuilder{}
+	return &ErrorBuilder{
+		IsSystemError:   false,
+		IsMultipleError: false,
+		Errors:          []models.ErrorDTO{},
+	}
 }
-
-// setup error ----------------------------------------------------------
 
 func (b *ErrorBuilder) SetIsSystemError(req bool) *ErrorBuilder {
 	b.IsSystemError = req
@@ -44,23 +44,4 @@ func (b *ErrorBuilder) SetError(req models.ErrorDTO) *ErrorBuilder {
 func (b *ErrorBuilder) SetStatus(req int) *ErrorBuilder {
 	b.Status = req
 	return b
-}
-
-// expose error ----------------------------------------------------------
-
-func (b *ErrorBuilder) ExposeHttpError(c *gin.Context) {
-
-	errors := []models.ErrorDTO{}
-
-	utils.IterateSlice(b.Errors, func(i int, err models.ErrorDTO) {
-		errors = append(errors, err)
-	})
-
-	response := httpcommon.SuccessResponse[any]{
-		Success: false,
-		Data:    nil,
-		Errors:  errors,
-	}
-
-	c.JSON(b.Status, response)
 }

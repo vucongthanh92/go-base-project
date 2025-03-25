@@ -38,17 +38,17 @@ func GetQueryParamsHTTP(c *gin.Context, dest interface{}) (err error) {
 func checkErr(c *gin.Context, err error) {
 	switch t := err.(type) {
 	case *json.UnmarshalTypeError:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(t.Field, constants.RequestInvalid, t.Field))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(t.Field, constants.REQUEST_INVALID, t.Field))
 		return
 	case *json.SyntaxError:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.REQUEST_INVALID, ""))
 		return
 	case validator.ValidationErrors:
 		errors := HandleValidationErrors(err)
 		c.JSON(http.StatusBadRequest, httpcommon.NewPartialSuccess[any](false, nil, errors))
 		return
 	default:
-		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.RequestInvalid, ""))
+		c.JSON(http.StatusBadRequest, httpcommon.NewErrorResponse(err.Error(), constants.REQUEST_INVALID, ""))
 		return
 	}
 }
