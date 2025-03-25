@@ -87,7 +87,7 @@ func (s *CategoryImpl) DeleteCategoryByID(ctx context.Context, categoryID uint64
 	}
 
 	if totalProduct > 0 {
-		resErr := errHandler.InitErrorBuilder().
+		resErr := errHandler.InitErrorBuilder(ctx).
 			SetLogError(errors.New(constants.InvalidValue)).
 			SetStatus(http.StatusBadRequest).
 			SetError(models.ErrorDTO{

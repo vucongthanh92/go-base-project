@@ -35,7 +35,7 @@ func (repo *categoryCommandRepository) InsertCategory(ctx context.Context, entit
 		Create(&entity).Error
 
 	if err != nil {
-		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
+		resErr := errHandler.InitErrorBuilder(ctx).SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
 			Message: err.Error(),
 			Code:    constants.SYSTEM_ERROR,
 		})
@@ -55,10 +55,7 @@ func (repo *categoryCommandRepository) UpdateCategory(ctx context.Context, entit
 		Update("name", entity.Name).Error
 
 	if err != nil {
-		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
-			Message: err.Error(),
-			Code:    constants.SYSTEM_ERROR,
-		})
+		resErr := errHandler.InitErrorBuilder(ctx).ValidateError(err)
 		return entity, resErr
 	}
 
@@ -74,12 +71,12 @@ func (repo *categoryCommandRepository) SoftDeleteCategoryByID(ctx context.Contex
 		Update("deleted_at", time.Now())
 
 	if res.Error != nil {
-		resErr := errHandler.InitErrorBuilder().ValidateError(res.Error)
+		resErr := errHandler.InitErrorBuilder(ctx).ValidateError(res.Error)
 		return resErr
 	}
 
 	if res.RowsAffected == 0 {
-		resErr := errHandler.InitErrorBuilder().ValidateError(gorm.ErrRecordNotFound)
+		resErr := errHandler.InitErrorBuilder(ctx).ValidateError(gorm.ErrRecordNotFound)
 		return resErr
 	}
 

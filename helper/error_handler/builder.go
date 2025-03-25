@@ -1,10 +1,13 @@
 package errorhandler
 
 import (
+	"context"
+
 	"github.com/vucongthanh92/go-base-project/internal/domain/models"
 )
 
 type ErrorBuilder struct {
+	ctx             context.Context
 	IsSystemError   bool              `json:"is_system_error"`
 	IsMultipleError bool              `json:"is_multiple_error"`
 	LogError        error             `json:"log_error"`
@@ -13,8 +16,9 @@ type ErrorBuilder struct {
 	Validator       ErrorValidator
 }
 
-func InitErrorBuilder() *ErrorBuilder {
+func InitErrorBuilder(ctx context.Context) *ErrorBuilder {
 	return &ErrorBuilder{
+		ctx:             ctx,
 		IsSystemError:   false,
 		IsMultipleError: false,
 		Errors:          []models.ErrorDTO{},

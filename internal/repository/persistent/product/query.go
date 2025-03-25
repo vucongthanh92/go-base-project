@@ -7,7 +7,6 @@ import (
 	"github.com/vucongthanh92/go-base-utils/tracing"
 	"gorm.io/gorm"
 
-	"github.com/vucongthanh92/go-base-project/helper/constants"
 	errHandler "github.com/vucongthanh92/go-base-project/helper/error_handler"
 	"github.com/vucongthanh92/go-base-project/internal/domain/entities"
 	"github.com/vucongthanh92/go-base-project/internal/domain/interfaces"
@@ -33,10 +32,7 @@ func (repo *productQueryRepository) GetProductByFilter(ctx context.Context, filt
 	err := repo.readDb.WithContext(ctx).Model(&entities.Product{}).Select("*").Count(&totalRows).
 		Limit(filter.Limit).Offset(filter.Offset).Find(&response).Error
 	if err != nil {
-		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
-			Message: err.Error(),
-			Code:    constants.SYSTEM_ERROR,
-		})
+		resErr := errHandler.InitErrorBuilder(ctx).ValidateError(err)
 		return response, totalRows, resErr
 	}
 
@@ -53,10 +49,7 @@ func (repo *productQueryRepository) CountProductByCategoryID(ctx context.Context
 		Where("category_id = ?", categoryID).Where("deleted_at is null").
 		Count(&total).Error
 	if err != nil {
-		resErr := errHandler.InitErrorBuilder().SetIsSystemError(true).SetLogError(err).SetError(models.ErrorDTO{
-			Message: err.Error(),
-			Code:    constants.SYSTEM_ERROR,
-		})
+		resErr := errHandler.InitErrorBuilder(ctx).ValidateError(err)
 		return total, resErr
 	}
 
